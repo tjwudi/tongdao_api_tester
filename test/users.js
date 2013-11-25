@@ -149,7 +149,7 @@ describe('Users Controller Tester', function(){
         done();
       });
     })
-  });
+  }); //get users count tester
 
   describe('[PATCH]/users/{id}', function(){
     beforeEach(login);
@@ -177,5 +177,41 @@ describe('Users Controller Tester', function(){
         done();
       });
     });
-  });
+  }); //Update user information tester
+
+
+  describe('[POST]/pending_users&[DELETE]/pending_users', function(){
+    beforeEach(login);
+    afterEach(logout);
+    var created_id = null;
+
+    it('should can create pending user', function(done){
+      config={};
+      config.url = host + '/pending_users';
+      config.method='POST';
+      config.form={
+        'email': commonHelper.randomString(10)
+      };
+      config.headers=auth_header;
+      request(config,function(err,res,body){
+        if (err) return console.log(err);
+        res.should.have.status(201);
+        result = JSON.parse(body);
+        result.should.have.property('id');
+        created_id = result['id'];
+        done();
+      });
+    });
+
+    it('should can delete pending user', function(done){
+      config={};
+      config.url = host + '/pending_users/' + created_id;
+      config.method='DELETE';
+      request(config,function(err,res,body){
+        if (err) return console.log(err);
+        res.should.have.status(200);
+        done();
+      });
+    });
+  });// create pending user
 });
