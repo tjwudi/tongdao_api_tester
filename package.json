@@ -5,6 +5,7 @@
   "dependencies": {
     "mocha": "*",
     "should": "*",
-    "request": "*"
+    "request": "*",
+    "underscore": "*"
   }
 }
