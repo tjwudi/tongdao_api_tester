@@ -38,7 +38,7 @@ describe('Users Controller Tester', function(){
 
 
 
-  describe('User follow tester', function(){
+  describe('[POST]/users/{id}/toggle_follow&[GET]/users/{id}/followship', function(){
     beforeEach(login);
     afterEach(logout);
 
@@ -50,7 +50,7 @@ describe('Users Controller Tester', function(){
       config.headers = auth_header;
       request(config, function(err, res, body) {
         if (err) return console.log(err);
-        res.statusCode.should.eql(200);
+        res.should.have.status(200);
         done();
       });
     });
@@ -62,6 +62,7 @@ describe('Users Controller Tester', function(){
       config.headers = auth_header;
       request(config, function(err, res, body) {
         if (err) return console.log(err);
+        res.should.have.status(200);
         result = JSON.parse(body);
         result.should.have.property('status');
         result.status.should.be.exactly(1);
@@ -77,6 +78,7 @@ describe('Users Controller Tester', function(){
       config.headers = auth_header;
       request(config, function(err, res, body) {
         if (err) return console.log(err);
+        res.should.have.status(200);
         res.statusCode.should.eql(200);
         done();
       });
@@ -89,6 +91,7 @@ describe('Users Controller Tester', function(){
       config.headers = auth_header;
       request(config, function(err, res, body) {
         if (err) return console.log(err);
+        res.should.have.status(200);
         result = JSON.parse(body);
         result.should.have.property('status');
         result.status.should.be.exactly(0);
@@ -98,7 +101,7 @@ describe('Users Controller Tester', function(){
   }); // User follow tester
 
 
-  describe('User registration', function(){ 
+  describe('[POST]/users', function(){ 
     it('should be able to register', function(done){
       var config = {};
       config.method = 'POST';
@@ -110,6 +113,7 @@ describe('Users Controller Tester', function(){
       }
       request(config, function(err, res, body){
         if (err) return console.log(err);
+        res.should.have.status(201);
         result = JSON.parse(body);
         result.should.have.property('id');
         result.should.have.property('auth_token');
@@ -118,10 +122,14 @@ describe('Users Controller Tester', function(){
     })
   }); // User registration tester
 
-  describe('User listing(auto complete) tester', function(){
+  describe('[GET]/users', function(){
+    beforeEach(login);
+    afterEach(logout);
+
     it('should be able to auto complete', function(done) {
       var config = {};
       config.method = 'GET';
+      config.headers = auth_header;
       config.url = host + '/users';
       config.qs = {
         'auto_complete_word' : 'w',
@@ -129,14 +137,31 @@ describe('Users Controller Tester', function(){
       };
       request(config, function(err, res, body) {
         if (err) return console.log(err);
+        res.should.have.status(200);
         result = JSON.parse(body);
         _.each(result, function(item){
-          item.should.have.property('nickname', 'avatar', 'school', 'speciality', 'gender', 'id');
-          item['nickname'].should.match(/^.*w.*$/);
+          item.should.have.property('nickname');
+          item['nickname'].should.match(/^.*w.*$/i);
         });
         done();
       });
     });
   }); // User listing tester
 
+
+  describe('[GET]/users/count', function(){
+    it('should be able to tell the user count', function(done){
+      config = {};
+      config.method = 'GET';
+      config.url = host + '/users/count';
+      request(config, function(err, res, body){
+        if (err) return console.log(err);
+        res.should.have.status(200);
+        result = JSON.parse(body);
+        result.should.have.property('count');
+        result['count'].should.be.type('number');
+        done();
+      });
+    })
+  });
 });
