@@ -55,21 +55,6 @@ describe('Users Controller Tester', function(){
       });
     });
 
-    it('Should be able to see the user actually followed the user/2 successfully', function(done){
-      var config = {};
-      config.method = 'GET';
-      config.url = host + '/users/2/followship';
-      config.headers = auth_header;
-      request(config, function(err, res, body) {
-        if (err) return console.log(err);
-        res.should.have.status(200);
-        result = JSON.parse(body);
-        result.should.have.property('status');
-        result.status.should.be.exactly(1);
-        done();
-      });
-    });
-
     it('Should be able to unfollow a user', function(done){
       var config = {};
       config.method = 'POST';
@@ -84,7 +69,7 @@ describe('Users Controller Tester', function(){
       });
     });
 
-    it('Should be able to see the user actually unfollowed the user/2 successfully', function(done){
+    it('Should be able to see the user actually follow/unfollowed the user/2 successfully', function(done){
       var config = {};
       config.method = 'GET';
       config.url = host + '/users/2/followship';
@@ -94,7 +79,7 @@ describe('Users Controller Tester', function(){
         res.should.have.status(200);
         result = JSON.parse(body);
         result.should.have.property('status');
-        result.status.should.be.exactly(0);
+        result.status.should.be.within(0, 1);
         done();
       });
     });
@@ -102,6 +87,8 @@ describe('Users Controller Tester', function(){
 
 
   describe('[POST]/users', function(){ 
+    beforeEach(login);
+    afterEach(logout);
     it('should be able to register', function(done){
       var config = {};
       config.method = 'POST';
@@ -125,7 +112,6 @@ describe('Users Controller Tester', function(){
   describe('[GET]/users', function(){
     beforeEach(login);
     afterEach(logout);
-
     it('should be able to auto complete', function(done) {
       var config = {};
       config.method = 'GET';
@@ -163,5 +149,33 @@ describe('Users Controller Tester', function(){
         done();
       });
     })
+  });
+
+  describe('[PATCH]/users/{id}', function(){
+    beforeEach(login);
+    afterEach(logout);
+    it('should be able to update user information', function(done){
+      config = {};
+      config.method = 'PATCH';
+      config.url = host + '/users/1';
+      config.headers = auth_header;
+      config.form = {
+        'nickname': commonHelper.randomString(9),
+        'gender': commonHelper.randomString(9),
+        'contact': commonHelper.randomString(9),
+        'school': commonHelper.randomString(9),
+        'speciality': commonHelper.randomString(9),
+        'avatar': commonHelper.randomString(9),
+        'experence': commonHelper.randomString(9),
+        'major': commonHelper.randomString(9)
+      }
+      request(config, function(err, res, body){
+        if (err) return console.log(err);
+        res.should.have.status(200);
+        result = JSON.parse(body);
+        result.should.include(_.omit(config.form, 'contact'));
+        done();
+      });
+    });
   });
 });
