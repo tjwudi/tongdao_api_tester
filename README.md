@@ -5,13 +5,14 @@ An automated api tester used for tongdao backend api testing.
 You should have node.js&npm installed first.
 Clone this repo, then `$ cd path_to_repo`.  
 Run `$ npm install` to install dependencies.  
-Run `$ npm install -g mocha` to install mocha.
+Run `$ npm install -g mocha` to install mocha.  
+Rename `config.sample.js` to `config.js`
 
 # Map through hosts file
 Run `$ sudo vim /etc/hosts`, add a single line `127.0.0.1 l`. Then save the file.  
 
 # Run the tests
-Start the api server on 127.0.0.1:3000
+Start the api server on 127.0.0.1:3000  
 Run `$ mocha` to run the test.
 
 # Write tests

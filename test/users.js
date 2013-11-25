@@ -1,11 +1,12 @@
 var should = require('should'),
 request = require('request'),
 _ = require('underscore'),
+config = require('../config.js'),
 commonHelper = require('../helper/common.js');
 
 describe('Users Controller Tester', function(){
-  var host = 'http://l:3000',
-  token_id = null;
+  var host = config.host;
+  var token_id = null;
   var auth_header = {
     'AUTH_EMAIL': 'webmaster@leapoahead.com',
     'AUTH_TOKEN': 'theusertoken'
@@ -20,7 +21,9 @@ describe('Users Controller Tester', function(){
     };
     request(config, function(err, res, body) {
       if (err) return console.log(err);
-      token_id = (JSON.parse(body))['id'];
+      var result=JSON.parse(body);
+      token_id = result['id'];
+      auth_header['AUTH_TOKEN'] = result['auth_token'];
       done();
     });
   };
@@ -87,8 +90,6 @@ describe('Users Controller Tester', function(){
 
 
   describe('[POST]/users', function(){ 
-    beforeEach(login);
-    afterEach(logout);
     it('should be able to register', function(done){
       var config = {};
       config.method = 'POST';
@@ -100,7 +101,7 @@ describe('Users Controller Tester', function(){
       }
       request(config, function(err, res, body){
         if (err) return console.log(err);
-        res.should.have.status(201);
+        res.should.have.status(200);
         result = JSON.parse(body);
         result.should.have.property('id');
         result.should.have.property('auth_token');
