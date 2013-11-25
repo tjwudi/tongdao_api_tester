@@ -1,0 +1,10 @@
+{
+  "name": "tongdao_api_tester",
+  "version": "1.0.0",
+  "description": "Tongdao api tester based on node.js",
+  "dependencies": {
+    "mocha": "*",
+    "should": "*",
+    "request": "*"
+  }
+}
