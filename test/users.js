@@ -91,8 +91,8 @@ describe('Users Controller Tester', function(){
         res.should.have.status(200);
 
         result = JSON.parse(body);
-        result.should.have.property('status');
-        result.status.should.be.within(0, 3);
+        result.should.have.property('state');
+        result.state.should.be.within(0, 3);
 
         done();
       });
