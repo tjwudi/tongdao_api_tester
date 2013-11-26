@@ -45,7 +45,7 @@ describe('Projects Controller Tester', function(){
   afterEach(logout);
 
   var newProject = {
-    'title': 'Project ' + commonHelper.randomString(9),
+    'title': '同济大学 ' + commonHelper.randomString(9),
     'tags': [{"name":"School"},{"name":"Cooking"},{"name":commonHelper.randomString(5)}],
     'school': commonHelper.randomString(6) + ' University',
     'state': 'Wanting!'
@@ -149,7 +149,7 @@ describe('Projects Controller Tester', function(){
         done();
       });
     });
-  });
+  });//Update a project
 
   describe('[DELETE]/projects/{id}', function(){
     it('should be able to remove a project', function(done){
@@ -175,6 +175,28 @@ describe('Projects Controller Tester', function(){
       });
     });
 
-  });
+  }); //Delete project tester
+
+  describe('[GET]/users/{id}/projects', function(){
+    it('should be able to get user{id}\'s projects', function(done){
+      config={};
+      config.method='GET';
+      config.url = host + '/users/1/projects';
+      config.qs = {
+        page:1
+      }
+      request(config, function(err,res,body){
+        if (err) return console.log(err);
+        res.should.have.status(200);
+        result=JSON.parse(body);
+        result.should.be.an.Array;
+        _.each(result, function(item){
+          item.should.have.properties(['id', 'title', 'tags', 'school', 'state', 'created_at', 'updated_at']);
+        });
+        done();
+      });
+    });
+
+  }); //Get user's project list
 
 });
