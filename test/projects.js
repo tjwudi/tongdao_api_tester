@@ -63,6 +63,7 @@ describe('Projects Controller Tester', function(){
         res.should.have.status(200);
         result = JSON.parse(body);
         result.should.have.properties(['id', 'title', 'tags', 'school', 'state', 'created_at', 'updated_at']);
+        newProject = result;
         done();
       });
     });
@@ -87,7 +88,7 @@ describe('Projects Controller Tester', function(){
         done();
       });
     });
-    
+
     it('should be able to get projects by tag', function(done){
       config={};
       config.method='GET';
@@ -112,5 +113,68 @@ describe('Projects Controller Tester', function(){
       });
     });
   }); //Get project list
+
+  describe('[GET]/projects/{id}', function(){
+    it('should be able to get a single project', function(done){
+      config={};
+      config.method='GET';
+      config.url = host + '/projects/' + newProject.id;
+      request(config, function(err,res,body){
+        if (err) return console.log(err);
+        res.should.have.status(200);
+        result = JSON.parse(body);
+        result.should.have.properties(['id', 'title', 'tags', 'school', 'state', 'created_at', 'updated_at']);
+        done();
+      });
+    });
+  });//GET a single project 
+
+  describe('[PATCH]/projects/{id}', function(){
+    it('should be able to update a project', function(done){
+      config={};
+      config.method='PATCH';
+      config.url = host + '/projects/' + newProject.id;
+      config.headers = auth_header;
+      config.form = {
+        "title": commonHelper.randomString(9),
+        "tags": [{"name":"School"}],
+        "school": commonHelper.randomString(5) + ' University',
+        "state": "Wanting!"
+      }
+      request(config, function(err,res,body){
+        if (err) return console.log(err);
+        res.should.have.status(200);
+        result=JSON.parse(body);
+        result.should.include(config.form);
+        done();
+      });
+    });
+  });
+
+  describe('[DELETE]/projects/{id}', function(){
+    it('should be able to remove a project', function(done){
+      config = {};
+      config.method = 'DELETE';
+      config.url = host+'/projects/'+newProject.id;
+      config.headers = auth_header;
+      request(config, function(err,res,body){
+        if (err) return console.log(err);
+        res.should.have.status(200);
+        done();
+      });
+    });
+
+    it('should not be able to get the deleted project again', function(done){
+      config={};
+      config.method='GET';
+      config.url = host + '/projects/' + newProject.id;
+      request(config, function(err,res,body){
+        if (err) return console.log(err);
+        res.should.have.status(404);
+        done();
+      });
+    });
+
+  });
 
 });
