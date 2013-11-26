@@ -199,4 +199,64 @@ describe('Projects Controller Tester', function(){
 
   }); //Get user's project list
 
+
+  describe('[GET]/projects/count', function(){
+    it('should be able to get the count of projects(total)', function(done){
+      config = {};
+      config.method = 'GET';
+      config.url = host + '/projects/count';
+      request(config, function(err, res, body){
+        if (err) return console.log(err);
+        res.should.have.status(200);
+        result = JSON.parse(body);
+        result.should.have.property('count');
+        result['count'].should.be.an.Number;
+        done();
+      });
+    });
+  }); //Get the count of all projects
+
+  var prev_like_state = null; // record for next step
+  describe('[GET]/projects/{id}/state_like', function(){
+    it('should be able to get the like status', function(done){
+      config = {};
+      config.method = 'GET';
+      config.headers = auth_header;
+      config.url = host + '/projects/3/state_like';
+      
+      request(config, function(err, res, body){
+        if (err) return console.log(err);
+        res.should.have.status(200);
+
+        result = JSON.parse(body);
+        result.should.have.property('state');
+        result['state'].should.be.within(0, 1);
+        prev_like_state = result['state'];
+
+        done();
+      });
+    });
+  });
+
+  describe('[POST]/projects/{id}/toggle_like', function(){
+    it('should be able to like&unlike a project', function(done){
+      config = {};
+      config.method = 'POST';
+      config.url = host + '/projects/3/toggle_like';
+      config.headers = auth_header;
+      config.form = {};
+     
+      request(config, function(err, res, body){
+        if (err) return console.log(err);
+        res.should.have.status(200);
+
+        result = JSON.parse(body);
+        result.should.have.property('state');
+        (prev_like_state + result['state']).should.eql(1); // match previous record
+
+        done();
+      });
+    });
+  }); // Toggle User Like
+
 });

@@ -53,6 +53,11 @@ describe('Users Controller Tester', function(){
       request(config, function(err, res, body) {
         if (err) return console.log(err);
         res.should.have.status(200);
+
+        result = JSON.parse(body);
+        result.should.have.property('state');
+        result['state'].should.within(0, 3);
+
         done();
       });
     });
@@ -67,6 +72,11 @@ describe('Users Controller Tester', function(){
         if (err) return console.log(err);
         res.should.have.status(200);
         res.statusCode.should.eql(200);
+        
+        result = JSON.parse(body);
+        result.should.have.property('state');
+        result['state'].should.within(0, 3);
+
         done();
       });
     });
@@ -79,9 +89,11 @@ describe('Users Controller Tester', function(){
       request(config, function(err, res, body) {
         if (err) return console.log(err);
         res.should.have.status(200);
+
         result = JSON.parse(body);
         result.should.have.property('status');
-        result.status.should.be.within(0, 1);
+        result.status.should.be.within(0, 3);
+
         done();
       });
     });
