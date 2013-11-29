@@ -11,6 +11,9 @@ var auth_header = {
   'AUTH_EMAIL': 'webmaster@leapoahead.com',
   'AUTH_TOKEN': 'theusertoken'
 };
+
+var user_properties_general = ['id', 'email', 'nickname', 'gender', 'school', 'major', 'speciality', 'experence', 'avatar', 'count_of_followers', 'count_of_followings', 'last_auth_time', 'last_login_time', 'created_at', 'updated_at'];
+
 var login = function(done){
   var config = {};
   config.method = 'POST';
@@ -226,4 +229,42 @@ describe('Users Controller Tester', function(){
       });
     });
   });// create pending user
+
+  describe('[GET]/users/{id}/followers&[GET]/users/{id}/followings', function(){
+    it('should be able to get the user\'s followers', function(done){
+      config={};
+      config.url = host + '/users/1/followers';
+      config.method='GET';
+      request(config, function(err,res,body){
+        if (err) return console.log(err);
+        res.should.have.status(200);
+        
+        result = JSON.parse(body);
+        result.should.be.an.Array;
+        _.each(result, function(item){
+          item.should.have.properties(user_properties_general);
+        });
+        done();
+      });
+    });
+
+    it('should be able to get the user\'s followings', function(done){
+      config={};
+      config.url = host + '/users/1/followings';
+      config.method='GET';
+      request(config, function(err,res,body){
+        if (err) return console.log(err);
+        res.should.have.status(200);
+        
+        result = JSON.parse(body);
+        result.should.be.an.Array;
+        _.each(result, function(item){
+          item.should.have.properties(user_properties_general);
+        });
+        done();
+      });
+    });
+  }); // get user followers & followings
+
+
 });

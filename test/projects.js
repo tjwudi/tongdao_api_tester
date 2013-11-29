@@ -62,7 +62,7 @@ describe('Projects Controller Tester', function(){
         if (err) return console.log(err);
         res.should.have.status(200);
         result = JSON.parse(body);
-        result.should.have.properties(['id', 'title', 'tags', 'school', 'state', 'created_at', 'updated_at']);
+        result.should.have.properties(['id','title','tags','school','state','count_of_views','count_of_likes','created_at','updated_at'])
         newProject = result;
         done();
       });
@@ -75,15 +75,17 @@ describe('Projects Controller Tester', function(){
       config.method='GET';
       config.url = host + '/projects';
       config.qs = {
-        page:1
+        page:1,
+        per_page:1
       }
       request(config, function(err,res,body){
         if (err) return console.log(err);
         res.should.have.status(200);
         result=JSON.parse(body);
         result.should.be.an.Array;
+        result.length.should.eql(1);
         _.each(result, function(item){
-          item.should.have.properties(['id', 'title', 'tags', 'school', 'state', 'created_at', 'updated_at']);
+          item.should.have.properties(['id','title','tags','school','state','count_of_views','count_of_likes','created_at','updated_at'])
         });
         done();
       });
@@ -103,7 +105,7 @@ describe('Projects Controller Tester', function(){
         result = JSON.parse(body);
         result.should.be.an.Array;
         _.each(result, function(item){
-          item.should.have.properties(['id', 'title', 'tags', 'school', 'state', 'created_at', 'updated_at']);
+          item.should.have.properties(['id','title','tags','school','state','count_of_views','count_of_likes','created_at','updated_at'])
           var findSchoolTag = _.find(item.tags, function(tag) {
             return tag.name === 'School';
           });
@@ -123,7 +125,7 @@ describe('Projects Controller Tester', function(){
         if (err) return console.log(err);
         res.should.have.status(200);
         result = JSON.parse(body);
-        result.should.have.properties(['id', 'title', 'tags', 'school', 'state', 'created_at', 'updated_at']);
+        result.should.have.properties(['id','title','tags','school','state','count_of_views','count_of_likes','created_at','updated_at'])
         done();
       });
     });
@@ -191,7 +193,7 @@ describe('Projects Controller Tester', function(){
         result=JSON.parse(body);
         result.should.be.an.Array;
         _.each(result, function(item){
-          item.should.have.properties(['id', 'title', 'tags', 'school', 'state', 'created_at', 'updated_at']);
+          item.should.have.properties(['id','title','tags','school','state','count_of_views','count_of_likes','created_at','updated_at'])
         });
         done();
       });
