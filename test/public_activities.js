@@ -63,3 +63,25 @@ describe('[Get]/public_activities', function(){
   });
 
 }); // Get user's followings public activities
+
+describe('[GET]/users/{id}/public_activities', function(){
+  beforeEach(login);
+  afterEach(login);
+
+  it('should be able to get one user\'s public activities', function(done){
+    config={};
+    config.method='GET';
+    config.url = host + '/users/2/public_activities';
+    config.headers = auth_header;
+    request(config, function(err, res, body){
+      if (err) return console.log(err);
+      res.should.have.status(200);
+
+      result=JSON.parse(body);
+      _.each(result, function(item){
+        item.should.have.properties(public_activity_properties);
+      });
+      done();
+    });
+  });
+});
