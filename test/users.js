@@ -12,8 +12,6 @@ var auth_header = {
   'AUTH_TOKEN': 'theusertoken'
 };
 
-var user_properties_general = ['id', 'email', 'nickname', 'gender', 'school', 'major', 'speciality', 'experence', 'avatar', 'count_of_followers', 'count_of_followings', 'last_auth_time', 'last_login_time', 'created_at', 'updated_at'];
-
 var login = function(done){
   var config = {};
   config.method = 'POST';
@@ -41,6 +39,9 @@ var logout = function(done){
     done();
   });
 };
+
+var user_properties_index = ['id', 'nickname', 'school', 'gender', 'major', 'speciality', 'experence', 'avatar', 'count_of_followers', 'count_of_followings'];
+var user_properties_show = ['id', 'email', 'nickname', 'gender', 'contact', 'school', 'major', 'speciality', 'experence', 'avatar', 'auth_token', 'count_of_followers', 'count_of_followings', 'last_auth_time', 'last_login_time'];
 
 describe('Users Controller Tester', function(){
   describe('[POST]/users/{id}/toggle_follow&[GET]/users/{id}/followship', function(){
@@ -141,7 +142,7 @@ describe('Users Controller Tester', function(){
         res.should.have.status(200);
         result = JSON.parse(body);
         _.each(result, function(item){
-          item.should.have.property('nickname');
+          item.should.have.properties(user_properties_index);
           item['nickname'].should.match(/^.*w.*$/i);
         });
         done();
@@ -210,7 +211,7 @@ describe('Users Controller Tester', function(){
       config.headers=auth_header;
       request(config,function(err,res,body){
         if (err) return console.log(err);
-        res.should.have.status(201);
+        res.should.have.status(200);
         result = JSON.parse(body);
         result.should.have.property('id');
         created_id = result['id'];
@@ -242,7 +243,7 @@ describe('Users Controller Tester', function(){
         result = JSON.parse(body);
         result.should.be.an.Array;
         _.each(result, function(item){
-          item.should.have.properties(user_properties_general);
+          item.should.have.properties(user_properties_index);
         });
         done();
       });
@@ -259,7 +260,7 @@ describe('Users Controller Tester', function(){
         result = JSON.parse(body);
         result.should.be.an.Array;
         _.each(result, function(item){
-          item.should.have.properties(user_properties_general);
+          item.should.have.properties(user_properties_index);
         });
         done();
       });

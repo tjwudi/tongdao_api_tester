@@ -40,6 +40,9 @@ var logout = function(done){
 };
 
 
+var project_properties_index = ['id', 'title', 'tags', 'members', 'school', 'state', 'count_of_likes', 'count_of_views', 'created_at', 'updated_at'];
+var project_properties_show = ['id', 'title', 'tags', 'members', 'school', 'state', 'count_of_likes', 'count_of_views', 'created_at', 'updated_at'];
+
 describe('Projects Controller Tester', function(){
   beforeEach(login);
   afterEach(logout);
@@ -62,7 +65,7 @@ describe('Projects Controller Tester', function(){
         if (err) return console.log(err);
         res.should.have.status(200);
         result = JSON.parse(body);
-        result.should.have.properties(['id','title','tags','school','state','count_of_views','count_of_likes','created_at','updated_at'])
+        result.should.have.properties(project_properties_show)
         newProject = result;
         done();
       });
@@ -85,7 +88,7 @@ describe('Projects Controller Tester', function(){
         result.should.be.an.Array;
         result.length.should.eql(1);
         _.each(result, function(item){
-          item.should.have.properties(['id','title','tags','school','state','count_of_views','count_of_likes','created_at','updated_at'])
+          item.should.have.properties(project_properties_index);
         });
         done();
       });
@@ -105,7 +108,7 @@ describe('Projects Controller Tester', function(){
         result = JSON.parse(body);
         result.should.be.an.Array;
         _.each(result, function(item){
-          item.should.have.properties(['id','title','tags','school','state','count_of_views','count_of_likes','created_at','updated_at'])
+          item.should.have.properties(project_properties_index);
           var findSchoolTag = _.find(item.tags, function(tag) {
             return tag.name === 'School';
           });
@@ -125,7 +128,7 @@ describe('Projects Controller Tester', function(){
         if (err) return console.log(err);
         res.should.have.status(200);
         result = JSON.parse(body);
-        result.should.have.properties(['id','title','tags','school','state','count_of_views','count_of_likes','created_at','updated_at'])
+        result.should.have.properties(project_properties_show);
         done();
       });
     });
@@ -193,7 +196,7 @@ describe('Projects Controller Tester', function(){
         result=JSON.parse(body);
         result.should.be.an.Array;
         _.each(result, function(item){
-          item.should.have.properties(['id','title','tags','school','state','count_of_views','count_of_likes','created_at','updated_at'])
+          item.should.have.properties(project_properties_index);
         });
         done();
       });

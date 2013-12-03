@@ -39,7 +39,8 @@ var logout = function(done){
   });
 };
 
-var public_activity_properties = ['id', 'data', 'user_id', 'created_at', 'updated_at'];
+var public_activity_properties_index = ['id', 'data', 'user', 'created_at', 'updated_at'];
+var user_properties_index = ['id', 'nickname', 'school', 'gender', 'major', 'speciality', 'experence', 'avatar', 'count_of_followers', 'count_of_followings'];
 
 describe('[Get]/public_activities', function(){
   beforeEach(login);
@@ -56,7 +57,8 @@ describe('[Get]/public_activities', function(){
 
       result=JSON.parse(body);
       _.each(result, function(item){
-        item.should.have.properties(public_activity_properties);
+        item.should.have.properties(public_activity_properties_index);
+        item.user.should.have.properties(user_properties_index);
       });
       done();
     });
@@ -79,7 +81,8 @@ describe('[GET]/users/{id}/public_activities', function(){
 
       result=JSON.parse(body);
       _.each(result, function(item){
-        item.should.have.properties(public_activity_properties);
+        item.should.have.properties(public_activity_properties_index);
+        item.user.should.have.properties(user_properties_index);
       });
       done();
     });
