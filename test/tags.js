@@ -39,6 +39,8 @@ var logout = function(done){
   });
 };
 
+var tag_properties_index = ['name', 'id'];
+
 describe('Tags API Tester', function(){
   beforeEach(login);
   afterEach(logout);
@@ -63,7 +65,7 @@ describe('Tags API Tester', function(){
         // console.log(result);
         result.should.be.an.Array;
         _.each(result, function(item){
-          item.should.have.properties('created_at', 'id', 'name', 'updated_at');
+          item.should.have.properties(tag_properties_index);
         });
         done();
       });
@@ -88,7 +90,7 @@ describe('Tags API Tester', function(){
         // console.log(result);
         result.should.be.an.Array;
         _.each(result, function(item){
-          item.should.have.properties('created_at', 'id', 'name', 'updated_at');
+          item.should.have.properties(tag_properties_index);
           item['name'].should.match(/^school$/i);
         });
         done();
