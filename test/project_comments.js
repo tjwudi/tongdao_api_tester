@@ -60,3 +60,43 @@ describe('[GET]/projects/{id}/project_comments', function(){
     });
   });
 });
+
+
+  it('should be able to create a new project comment in a post', function(done){
+    config = {};
+    config.headers = auth_header;
+    config.url = host + '/projects/1/project_posts/1/project_comments';
+    config.form = {
+      "content": commonHelper.randomString(100),
+      "emotion": "Smile"
+    }
+    config.method="POST";
+
+    request(config, function(err, res, body){
+      if (err) return console.log(err);
+      res.should.have.status(200);
+
+      result = JSON.parse(body);
+      result.should.be.an.Object;
+      result.should.have.properties(project_comment_properties_show);
+      done();
+    });
+  });
+
+  it('should be able to list project comments in a post', function(done){
+    config = {};
+    config.url = host + '/projects/1/project_posts/1/project_comments';
+    config.method = 'GET';
+
+    request(config, function(err, res, body){
+      if (err) return console.log(err);
+      res.should.have.status(200);
+
+      result=JSON.parse(body);
+      result.should.be.an.Array;
+      _.each(result, function(item){
+        item.should.have.properties(project_comment_properties_show);
+      });
+      done();
+    });
+  });
