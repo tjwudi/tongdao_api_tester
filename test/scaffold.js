@@ -11,7 +11,7 @@ var auth_header = {
   'AUTH_EMAIL': 'webmaster@leapoahead.com',
   'AUTH_TOKEN': 'theusertoken'
 };
-var login = function(done){
+module.exports.login = function(done){
   var config = {};
   config.method = 'POST';
   config.url = host + '/sessions';
@@ -23,11 +23,11 @@ var login = function(done){
     if (err) return console.log(err);
     var result=JSON.parse(body);
     token_id = result['id'];
-    auth_header['AUTH_TOKEN'] = result['auth_token'];
+    auth_header['AUTH_TOKEN'] = result['token'];
     done();
   });
 };
-var logout = function(done){
+module.exports.logout = function(done){
   var config = {};
   config.method = 'DELETE';
   config.url = host + '/sessions/' + token_id;

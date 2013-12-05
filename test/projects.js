@@ -3,7 +3,7 @@ var request = require('request');
 var _ = require('underscore');
 var config = require('../config.js');
 var commonHelper = require('../helper/common.js');
-
+var scaffold = require('./scaffold.js');
 
 var host = config.host;
 var token_id = null;
@@ -11,34 +11,8 @@ var auth_header = {
   'AUTH_EMAIL': 'webmaster@leapoahead.com',
   'AUTH_TOKEN': 'theusertoken'
 };
-var login = function(done){
-  var config = {};
-  config.method = 'POST';
-  config.url = host + '/sessions';
-  config.form = {
-    'email': 'webmaster@leapoahead.com',
-    'encrypted_password': 'abcabc'
-  };
-  request(config, function(err, res, body) {
-    if (err) return console.log(err);
-    var result=JSON.parse(body);
-    token_id = result['id'];
-    auth_header['AUTH_TOKEN'] = result['auth_token'];
-    done();
-  });
-};
-var logout = function(done){
-  var config = {};
-  config.method = 'DELETE';
-  config.url = host + '/sessions/' + token_id;
-  config.headers = auth_header;
-  request(config, function(err, res, body) {
-    if (err) return console.log(err);
-    token_id = null;
-    done();
-  });
-};
-
+var login = scaffold.login;
+var logout = scaffold.logout;
 
 var project_properties_index = ['id', 'title', 'tags', 'members', 'school', 'state', 'count_of_likes', 'count_of_views', 'created_at', 'updated_at'];
 var project_properties_show = ['id', 'title', 'tags', 'members', 'school', 'state', 'count_of_likes', 'count_of_views', 'created_at', 'updated_at'];
@@ -65,7 +39,7 @@ describe('Projects Controller Tester', function(){
         if (err) return console.log(err);
         res.should.have.status(200);
         result = JSON.parse(body);
-        result.should.have.properties(project_properties_show)
+        result.should.have.properties(project_properties_show);
         newProject = result;
         done();
       });
