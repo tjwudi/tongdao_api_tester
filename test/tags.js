@@ -37,8 +37,8 @@ describe('Tags API Tester', function(){
 
         var result = JSON.parse(body);
         // console.log(result);
-        result.should.be.an.Array;
-        _.each(result, function(item){
+        result.data.should.be.an.Array;
+        _.each(result.data, function(item){
           item.should.have.properties(tag_properties_index);
         });
         done();
@@ -62,8 +62,8 @@ describe('Tags API Tester', function(){
 
         var result = JSON.parse(body);
         // console.log(result);
-        result.should.be.an.Array;
-        _.each(result, function(item){
+        result.data.should.be.an.Array;
+        _.each(result.data, function(item){
           item.should.have.properties(tag_properties_index);
           item['name'].should.match(/^school$/i);
         });

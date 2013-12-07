@@ -52,8 +52,9 @@ describe('[GET]/projects/{id}/project_comments', function(){
       res.should.have.status(200);
 
       result=JSON.parse(body);
-      result.should.be.an.Array;
-      _.each(result, function(item){
+      result.total_pages.should.be.an.Number;
+      result.data.should.be.an.Array;
+      _.each(result.data, function(item){
         item.should.have.properties(project_comment_properties_show);
       });
       done();
@@ -93,8 +94,9 @@ describe('[GET]/projects/{id}/project_comments', function(){
       res.should.have.status(200);
 
       result=JSON.parse(body);
-      result.should.be.an.Array;
-      _.each(result, function(item){
+      result.total_pages.should.be.an.Number;
+      result.data.should.be.an.Array;
+      _.each(result.data, function(item){
         item.should.have.properties(project_comment_properties_show);
       });
       done();

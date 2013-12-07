@@ -59,9 +59,10 @@ describe('Projects Controller Tester', function(){
         if (err) return console.log(err);
         res.should.have.status(200);
         result=JSON.parse(body);
-        result.should.be.an.Array;
-        result.length.should.eql(1);
-        _.each(result, function(item){
+        result.total_pages.should.be.an.Number;
+        result.data.should.be.an.Array;
+        result.data.length.should.eql(1);
+        _.each(result.data, function(item){
           item.should.have.properties(project_properties_index);
         });
         done();
@@ -80,8 +81,9 @@ describe('Projects Controller Tester', function(){
         if (err) return console.log(err);
         res.should.have.status(200);
         result = JSON.parse(body);
-        result.should.be.an.Array;
-        _.each(result, function(item){
+        result.total_pages.should.be.an.Number;
+        result.data.should.be.an.Array;
+        _.each(result.data, function(item){
           item.should.have.properties(project_properties_index);
           var findSchoolTag = _.find(item.tags, function(tag) {
             return tag.name === 'School';
@@ -168,8 +170,9 @@ describe('Projects Controller Tester', function(){
         if (err) return console.log(err);
         res.should.have.status(200);
         result=JSON.parse(body);
-        result.should.be.an.Array;
-        _.each(result, function(item){
+        result.total_pages.should.be.an.Number;
+        result.data.should.be.an.Array;
+        _.each(result.data, function(item){
           item.should.have.properties(project_properties_index);
         });
         done();

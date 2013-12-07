@@ -30,7 +30,9 @@ describe('[Get]/public_activities', function(){
       res.should.have.status(200);
 
       result=JSON.parse(body);
-      _.each(result, function(item){
+      result.total_pages.should.be.an.Number;
+      result.data.should.be.an.Array;
+      _.each(result.data, function(item){
         item.should.have.properties(public_activity_properties_index);
         item.user.should.have.properties(user_properties_index);
       });
@@ -54,7 +56,9 @@ describe('[GET]/users/{id}/public_activities', function(){
       res.should.have.status(200);
 
       result=JSON.parse(body);
-      _.each(result, function(item){
+      result.total_pages.should.be.an.Number;
+      result.data.should.be.an.Array;
+      _.each(result.data, function(item){
         item.should.have.properties(public_activity_properties_index);
         item.user.should.have.properties(user_properties_index);
       });
