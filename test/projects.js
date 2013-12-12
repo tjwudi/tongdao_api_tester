@@ -241,4 +241,22 @@ describe('Projects Controller Tester', function(){
     });
   }); // Toggle User Like
 
+  describe('[POST]/projects/{id}/toggle_membership', function(){
+    it ('should be able to toggle user\'s membership to a project', function(done){
+      config = {};
+      config.method = 'POST';
+      config.url = host + '/projects/2/toggle_membership';
+      config.headers = auth_header;
+      config.form = {
+        user_id: 2
+      };
+
+      request(config, function(err, res, body){
+        if (err) return console.log(err);
+        res.should.have.status(200);
+        done();
+      });
+    });
+  });
+
 });
